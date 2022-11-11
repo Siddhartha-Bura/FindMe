@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    
+</head>
+
+<body>
+    <div id="mpl"></div>
+    <py-config>
+        packages = [
+            "matplotlib",
+            "numpy",
+            "pandas",
+            "itertools"
+        ]
+        <!-- - paths:
+            - ex.py -->
+    </py-config>
+    <py-script output="mpl">
+        from itertools import count
+        import pandas as pd
+        import matplotlib.pyplot as plt
+        from matplotlib.animation import FuncAnimation
+        plt.style.use('fivethirtyeight')
+
+
+        def animate(i):
+            df = pd.read_csv('abc.csv',header=None)
+
+            if not df[0].isnull().values.any() and not not df[0].isnull().values.any():
+                return
+            plt.plot(df[0],df[1])
+
+        ani = FuncAnimation(plt.gcf(), animate, interval=1000)
+        plt.tight_layout()
+        plt.show()
+
+
+
+
+    </py-script>
+</body>
+
+</html>
