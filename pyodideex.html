@@ -1,0 +1,48 @@
+<!doctype html>
+<meta charset="utf-8">
+<html lang="en">
+<html>
+
+<head>
+    <script src="https://pyodide.cdn.iodide.io/pyodide.js"></script>
+</head>
+
+<body>
+</body>
+<script type="text/javascript">
+    languagePluginLoader.then(() => {
+        pyodide.loadPackage(['matplotlib', 'pandas', 'itertools']).then(() => {
+            pyodide.runPython(`
+            from itertools import count
+            import pandas as pd
+            import matplotlib.pyplot as plt
+            from matplotlib.animation import FuncAnimation
+            plt.style.use('fivethirtyeight')
+            
+
+
+            def animate(i):
+                df = pd.read_csv('abc.csv',header=None)
+
+                if not df[0].isnull().values.any() and not not df[0].isnull().values.any():
+                    return
+                plt.plot(df[0],df[1])
+
+            ani = FuncAnimation(plt.gcf(), animate, interval=1000)
+            plt.tight_layout()
+            plt.show()
+
+            print("hi")
+            img_str = 'data:image/png;base64,' + base64.b64encode(buf.read()).decode('UTF-8')
+        `
+            );
+
+            document.getElementById("pyplotfigure").src = pyodide.globals.img_str
+
+        });
+    });
+
+</script>
+
+<div id="pyplotdiv"><img id="pyplotfigure" /></div>
+<html>
