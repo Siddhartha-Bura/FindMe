@@ -3,6 +3,7 @@ from flask_sockets import Sockets
 import socket
 import json
 import matplotlib.pyplot as plt
+
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -29,30 +30,35 @@ sockets = Sockets(app)
 def echo_socket(ws):
     f = open("accelerometer.txt", "a")
     cnt =0
-    while cnt<1:
+    while cnt<20:
         message = ws.receive()
         acc = json.loads(message)
         X = acc.get("dataX")
         Y = acc.get("dataY")
-        Z = acc.get("dataZ")
-        print("Accelerometer Data: \nX=" + str(X) + " Y=" + str(Y)+" Z="+str(Z)+"\n")
+        #Z = acc.get("dataZ")
+        #print("Accelerometer Data: \nX=" + str(X) + " Y=" + str(Y)+" Z="+str(Z)+"\n")
+        print(X+","+Y,file=f)
+        print(X+","+Y+"\n")
         #ws.send(message)
         #print(message, file=f)
         cnt = cnt+1
     f.close()
+    
 
 
 @sockets.route('/gyroscope')
 def echo_socket(ws):
     f = open("gyroscope.txt", "a")
     cnt = 0
-    while cnt <1:
+    while cnt <20:
         message = ws.receive()
         gyro = json.loads(message)
         X1 = gyro.get("dataX")
         Y1 = gyro.get("dataY")
-        Z1 = gyro.get("dataZ")
-        print("Gyroscope Data: \n X=" + str(X1) + " Y=" + str(Y1)+" Z="+str(Z1)+"\n")
+        #Z1 = gyro.get("dataZ")
+        #print("Gyroscope Data: \n X=" + str(X1) + " Y=" + str(Y1)+" Z="+str(Z1)+"\n")
+        print(X1+","+Y1,file=f)
+        print(X1+","+Y1+"\n")
         #ws.send(message)
         #print(message, file=f)
         cnt = cnt+1
@@ -133,9 +139,9 @@ def echo_socket(ws):
 
 @sockets.route('/geolocation')
 def echo_socket(ws):
-    f = open("geolocation.txt", "a")
+    f = open("Geo.txt", "a")
     cnt = 0
-    while cnt<1:
+    while cnt<20:
         message = ws.receive()
         loc = json.loads(message)
         loc_data = loc.get("data")
@@ -146,11 +152,12 @@ def echo_socket(ws):
         #loc_coords1 = json.loads(loc_coords)
         longitude = loc_data1.get("longitude")
         latitude = loc_data1.get("latitude")
-        altitude = loc_data1.get("altitude")
+        #altitude = loc_data1.get("altitude")
         #print(type(message))
        ## print(type(loc_data1))
        ## print(loc_data1.items())
-        print("GPS Data: \n Latitude=" + str(longitude) + " Longitude=" + str(latitude)+" Altitude="+str(altitude)+"\n")
+        print( str(longitude) + "," + str(latitude),file=f)
+        print(str(longitude) + " ," + str(latitude)+"\n")
        # return longitude,latitude
         #ws.send(message)
        # print(message, file=f)
@@ -169,3 +176,4 @@ if __name__ == "__main__":
     server = pywsgi.WSGIServer(
         ('0.0.0.0', 5000), app, handler_class=WebSocketHandler)
     server.serve_forever()
+
